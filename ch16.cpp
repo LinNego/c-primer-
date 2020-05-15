@@ -59,6 +59,9 @@ template <unsigned N, typename T> constexpr
 T* end(const T (&arr)[N]) {
 	return N;
 }
+
+//16.7
+//不是所有容器都有重载了<运算符，但是!= 几乎所有容器都重载了。
 int main() {
 	//cout << compare(1, 2) << endl;
 	int a[5] = {1, 2, 3, 4, 5};

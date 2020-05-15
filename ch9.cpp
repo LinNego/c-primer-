@@ -541,7 +541,7 @@ long long fun(string s) {
 		}
 	}
 	string temp;
-	while(!sta2.empty()) {
+	while(!sta2.empty()) {w
 		temp += sta2.top();
 		sta2.pop();
 	}
