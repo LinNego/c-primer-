@@ -7,8 +7,10 @@
 #include <string>
 #include <algorithm>
 #include <utility>
+#include <iostream>
 class String {
 public:
+	friend std::ostream& operator<<(std::ostream&, const String &);
 	typedef std::string::size_type size_t;
 	String():
 		elements(nullptr), first_free(nullptr), cap(nullptr) {}
@@ -17,6 +19,21 @@ public:
 	String& operator=(const String&);
 	String(String&&) noexcept;
 	String& operator=(String&&) noexcept;
+	const char& operator[](unsigned t)const {
+		if(t >= first_free - elements) {
+			throw std::runtime_error("error: t is so big");
+		}
+		return elements[t];
+	}
+	char& operator[](unsigned t) {
+		if(t >= first_free - elements) {
+			throw std::runtime_error("error: t is so big");
+		}
+		return elements[t];
+	}
+	bool operator<(const String &s) const;
+	bool operator==(const String &s) const;
+	bool operator!=(const String &rhs) const { return !(*this == rhs); }
 	size_t size() const { return first_free - elements;}
 	size_t capacity() const { return cap - elements; }
 	char* begin() const { return elements; }
@@ -33,7 +50,35 @@ private:
 };
 std::allocator<char> String::alloc;
 
-String& String::String(String &&rhs) :noexcept
+bool String::operator<(const String &s) const{
+	char *b = elements, *c = s.elements;
+	while(1) {
+		if(c == s.first_free) return false;
+		if(b == first_free || *b < *c) return true;
+		++b;
+		++c;
+	}
+}
+bool String::operator==(const String &rhs) const {
+	if(first_free - elements != rhs.first_free - rhs.elements) return false;
+	char *b = elements, *c = rhs.elements;
+	for(int i = 0; i < first_free - elements; ++i) {
+		if(*b != *c) return false;
+		++b;
+		++c;
+	}
+	return true;
+}
+
+std::ostream& operator<<(std::ostream &os, const String &rhs) {
+	char *b = rhs.elements;
+	while(b != rhs.first_free) {
+		os << *b;
+	}
+	return os;
+}
+
+String::String(String &&rhs) noexcept :
 		elements(rhs.elements), first_free(rhs.first_free), cap(rhs.cap) {
 		rhs.elements = rhs.first_free = rhs.cap = nullptr;
 }
@@ -46,6 +91,7 @@ String& String::operator=(String &&rhs) noexcept {
 		cap = rhs.cap;
 		rhs.first_free = rhs.elements = rhs.cap = nullptr;
 	}
+	return *this;
 }
 
 void String::free() {

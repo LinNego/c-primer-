@@ -60,8 +60,41 @@ T* end(const T (&arr)[N]) {
 	return N;
 }
 
-//16.7
+//16.8
 //不是所有容器都有重载了<运算符，但是!= 几乎所有容器都重载了。
+
+//16.9
+//见书本
+
+//16.10
+//类模板的一个实例定义了一个类类型
+
+
+//16.11
+template <typename elemType> class ListItem;
+template <typename elemType> class List {
+public:
+	List();
+	List(const List&);
+	List& operator=(const List&);
+	~List();
+	void insert(ListItem<elemType> *ptr, elemType value);
+private:
+	ListItem<elemType> *front, *end;
+	
+};
+
+//16.12
+//见Blob和BlobPtr头文件
+
+//16.13
+//一对一友好关系
+
+//16.14
+//16.15
+//见类文件
+
+//16.16
 int main() {
 	//cout << compare(1, 2) << endl;
 	int a[5] = {1, 2, 3, 4, 5};

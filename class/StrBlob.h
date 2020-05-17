@@ -25,6 +25,20 @@ public:
 	//void push_back(std::string &&t)&&;
 	void push_back(std::string &&t) { data->push_back(t); }
 	void pop_back();
+	bool operator<(const StrBlob &rhs) const { return *data < *rhs.data; }
+	bool operator==(const StrBlob &rhs) const { return *data == *rhs.data;}
+	bool operator!=(const StrBlob &rhs) const { return *data != *rhs.data; }
+	const std::string operator[](unsigned t)const {
+		if(t >= data->size()) 
+			throw std::runtime_error("t is so big");
+		return (*data)[t];  //error : data->[t];
+	}
+	std::string operator[](unsigned t) {
+		if(t >= data->size()) 
+			throw std::runtime_error("t is so big");
+		return (*data)[t];   //error: data->[t];
+	}
+
 	//访问元素
 	std::string& front() const;
 	std::string& back() const;
